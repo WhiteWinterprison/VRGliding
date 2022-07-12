@@ -23,6 +23,8 @@ public class WingsCalculation : MonoBehaviour
     private float distance;
     private float dragForce = 0;
     private float max_wingspan = 3f;
+
+    private float angleOfAttack = -30f;
     private float flightDirection;
     private Vector3 rotationOfPlayer;
     public float PlyerWeight;
@@ -53,6 +55,9 @@ public class WingsCalculation : MonoBehaviour
         dragForce = GravityCalculation(distance, rb.velocity.y);
         flightDirection = Player.transform.rotation.eulerAngles.y;
         directionOfFlight(flightDirection);
+        
+        ReduceSpeed(angleOfAttack, flightDirection);
+        IncreaseSpeed(angleOfAttack,dragForce, flightDirection);
     }
     
     public float GetHandDistance()
@@ -103,10 +108,48 @@ public class WingsCalculation : MonoBehaviour
 
         return wingspan/max_wingspan;
     }
-        
 
+    public void ReduceSpeed(float climbingAngle, float viewingDirection)
+    {   
+        
+        float tempVelocity = 0;
+        float horizontalVelocity = Mathf.Sqrt(Mathf.Pow(rb.velocity.x, 2) + Mathf.Pow(rb.velocity.z, 2));
+        float degreeToRadian = climbingAngle * Mathf.PI /180;
+        float viewingDirectionRadian = viewingDirection * Mathf.PI /180;
+
+        Vector3 tempVector = rb.velocity;
+        float Force = 0;
+        if (horizontalVelocity > 0 && climbingAngle >= 0)
+        {   
+            tempVelocity = horizontalVelocity - 9.81f * 0.02f * Mathf.Sin(degreeToRadian);
+            Force = 40f * Mathf.Sin(degreeToRadian)* rb.mass;
+            rb.AddForce(0,Force,0);
+            if (tempVelocity < 0) 
+            {
+                tempVector.x = 0;
+                tempVector.z = 0;
+                rb.velocity = tempVector;
+            }
+            else 
+            {
+                tempVector.x = tempVelocity * Mathf.Sin(viewingDirectionRadian);
+                tempVector.z = tempVelocity * Mathf.Cos(viewingDirectionRadian);
+                rb.velocity = tempVector;
+            }
+
+        }
     }
 
+    public void IncreaseSpeed(float climbingAngle, float dragForce, float viewingDirection)
+    {   
+        if(climbingAngle < 0)
+        {
+            float degreeToRadian = climbingAngle * Mathf.PI /180;
+            float directionRadian = viewingDirection * Mathf.PI /180;
+            rb.AddForce(-Mathf.Sin(degreeToRadian)*dragForce * Mathf.Sin(directionRadian), Mathf.Sin(degreeToRadian)*dragForce, -Mathf.Sin(degreeToRadian)*dragForce * Mathf.Cos(directionRadian));
+        }
+        
+    }
 
     public void directionOfFlight(float viewingDirection)
     {
