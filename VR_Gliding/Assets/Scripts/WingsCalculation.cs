@@ -18,19 +18,21 @@ public class WingsCalculation : MonoBehaviour
     [SerializeField] private GameObject Head;
     [SerializeField] private GameObject Player;
 
-    private Rigidbody rb;
+#region  AirResistanceVariables
+    private Rigidbody rb; 
 
-    private float distance;
-    private float dragForce = 0;
-    private float max_wingspan = 3f;
+    private float distance; // aka Wing span. From hand to hand
+    private float dragForce = 0; //resistance of the aire on y (falling and upwards falling)
+    private float max_wingspan = 3f; //max wingspan humans can have
 
-    private float angleOfAttack = -30f;
-    private float flightDirection;
-    private Vector3 rotationOfPlayer;
+#endregion
 
-    private float startTime; 
+    private float angleOfAttack = -30f; //Pitch up|down
+    private float flightDirection;  //yawn 
+    private Vector3 rotationOfPlayer;   //role
 
-    public float PlyerWeight;
+    private float startTime;  //debug. funktionality
+
     void Awake()
     {
         // Get Components in Awake
@@ -39,13 +41,12 @@ public class WingsCalculation : MonoBehaviour
         Core      = GameObject.FindGameObjectWithTag("Core");
         Head      = GameObject.FindGameObjectWithTag("Head");
         Player    = GameObject.FindGameObjectWithTag("Player");
+        
         rb = Player.GetComponent<Rigidbody>();
 
-        rb.AddForce(500f*rb.mass, 0, 0);
+        rb.AddForce(500f*rb.mass, 0, 0); //Start force in x & z
         startTime = Time.time;
 
-
-        //
     }
 
     void Update()
@@ -53,17 +54,17 @@ public class WingsCalculation : MonoBehaviour
         
     }
 
-    void FixedUpdate()
+    void FixedUpdate() //need Fix update to work with Unity Physic engine part
     {   
         distance = GetHandDistance();
         distance = ClampWingspan(distance);
-        dragForce = GravityCalculation(distance, rb.velocity.y);
-        flightDirection = Player.transform.rotation.eulerAngles.y;
-        directionOfFlight(flightDirection);
+        dragForce = GravityCalculation(distance, rb.velocity.y);//how fast do i fall  & distnace of my hands
+        flightDirection = Player.transform.rotation.eulerAngles.y; //get current player direction(rotation on y)
+        directionOfFlight(flightDirection); 
         
-        ReduceSpeed(angleOfAttack, flightDirection);
+        ReduceSpeed(angleOfAttack, flightDirection); //get controler rotation & flight direction(headset)
         IncreaseSpeed(angleOfAttack,dragForce, flightDirection);
-        rb.AddForce(0, dragForce, 0);
+        rb.AddForce(0, dragForce, 0); // use force magic
 
         // Print Debug
         Debug.Log(rb.velocity.x + "\n"+ rb.velocity.z);
@@ -105,8 +106,11 @@ public class WingsCalculation : MonoBehaviour
         return fullDist;
     }
 
-    public float GravityCalculation(float wingspan, float falling_velocity)
+    public float GravityCalculation(float wingspan, float falling_velocity) //calcualtes the plays drag while falling
     {    
+        //Numbers based on Reallive data :D Physics and magic
+        //Formel : dragForce = Coef * wingSpan * speed^2 
+        //area_coefficient+density_Air+drag_coefficient = Coef
         float area_coefficient = 40f;
         float density_Air = 1.225f;      
         float drag_coefficient = 2;         // depends on the object causing the drag. The factor 2 is similar to a rectangle
@@ -114,14 +118,14 @@ public class WingsCalculation : MonoBehaviour
         // formula to calculate drag which is dependent on the velocity
         // this allows to simulate a terminal falling velocity
         float resultingForce = 0.5f * area_coefficient * wingspan * density_Air * drag_coefficient * (falling_velocity * falling_velocity);
-        if (falling_velocity > 0)
+        if (falling_velocity > 0)// if falling upwards change direction of drag
         {
             resultingForce = -resultingForce;
         }
         return resultingForce;
     }
 
-    public float ClampWingspan(float wingspan)
+    public float ClampWingspan(float wingspan) //unity funktion exsist
     {
         if(wingspan > max_wingspan)
         {
@@ -139,15 +143,17 @@ public class WingsCalculation : MonoBehaviour
     {   
         
         float tempVelocity = 0;
-        float horizontalVelocity = Mathf.Sqrt(Mathf.Pow(rb.velocity.x, 2) + Mathf.Pow(rb.velocity.z, 2));
-        float degreeToRadian = climbingAngle * Mathf.PI /180;
+        float horizontalVelocity = Mathf.Sqrt(Mathf.Pow(rb.velocity.x, 2) + Mathf.Pow(rb.velocity.z, 2)); //speed mit Phytagoras
+        float degreeToRadian = climbingAngle * Mathf.PI /180; //get radian
         float viewingDirectionRadian = viewingDirection * Mathf.PI /180;
 
-        Vector3 tempVector = rb.velocity;
+        Vector3 tempVector = rb.velocity; //save so easy to change
+    
         float Force = 0;
-        if (horizontalVelocity > 0 && climbingAngle >= 0)
+
+        if (horizontalVelocity > 0 && climbingAngle >= 0)//if moving foward && angle >= 0 //only if moving forward i can go up
         {   
-            tempVelocity = horizontalVelocity - 9.81f * 0.02f * Mathf.Sin(degreeToRadian);
+            tempVelocity = horizontalVelocity - 9.81f * 0.02f * Mathf.Sin(degreeToRadian); //9.81 = gravaty , 0.02f time between fixed updates //physic 
             Force = 40f * Mathf.Sin(degreeToRadian)* rb.mass;
             rb.AddForce(0,Force,0);
             if (tempVelocity < 0) 
@@ -168,10 +174,12 @@ public class WingsCalculation : MonoBehaviour
 
     public void IncreaseSpeed(float climbingAngle, float dragForce, float viewingDirection)
     {   
-        if(climbingAngle < 0)
+        if(climbingAngle < 0) //angelofattack < 0 //controler points down
+
         {
-            float degreeToRadian = climbingAngle * Mathf.PI /180;
+            float degreeToRadian = climbingAngle * Mathf.PI /180; //radian claculation magic
             float directionRadian = viewingDirection * Mathf.PI /180;
+            //part you fall fast will move you forward (ex: 5 = 2+3), (sin = x;)(Cos = z)
             rb.AddForce(-Mathf.Sin(degreeToRadian)*dragForce * Mathf.Sin(directionRadian), Mathf.Sin(degreeToRadian)*dragForce, -Mathf.Sin(degreeToRadian)*dragForce * Mathf.Cos(directionRadian));
         }
         
@@ -179,9 +187,10 @@ public class WingsCalculation : MonoBehaviour
 
     public void directionOfFlight(float viewingDirection)
     {
+        //each loop check view direction and update velocity vectore 
         Vector3 tempVector = rb.velocity;
-        float horizontalVelocity = Mathf.Sqrt(Mathf.Pow(rb.velocity.x, 2) + Mathf.Pow(rb.velocity.z, 2));
-        float degreeToRadian = viewingDirection * Mathf.PI /180;
+        float horizontalVelocity = Mathf.Sqrt(Mathf.Pow(rb.velocity.x, 2) + Mathf.Pow(rb.velocity.z, 2)); //Phytagoras :3
+        float degreeToRadian = viewingDirection * Mathf.PI /180; //calculate degree to radian
         tempVector.x = horizontalVelocity * Mathf.Sin(degreeToRadian);
         tempVector.z = horizontalVelocity * Mathf.Cos(degreeToRadian);
         rb.velocity = tempVector;
