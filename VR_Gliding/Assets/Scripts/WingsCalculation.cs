@@ -23,6 +23,8 @@ public class WingsCalculation : MonoBehaviour
     private float distance;
     private float dragForce = 0;
     private float max_wingspan = 3f;
+    private float flightDirection;
+    private Vector3 rotationOfPlayer;
     public float PlyerWeight;
     void Awake()
     {
@@ -49,6 +51,8 @@ public class WingsCalculation : MonoBehaviour
         distance = GetHandDistance();
         distance = ClampWingspan(distance);
         dragForce = GravityCalculation(distance, rb.velocity.y);
+        flightDirection = Player.transform.rotation.eulerAngles.y;
+        directionOfFlight(flightDirection);
     }
     
     public float GetHandDistance()
@@ -102,5 +106,17 @@ public class WingsCalculation : MonoBehaviour
         
 
     }
+
+
+    public void directionOfFlight(float viewingDirection)
+    {
+        Vector3 tempVector = rb.velocity;
+        float horizontalVelocity = Mathf.Sqrt(Mathf.Pow(rb.velocity.x, 2) + Mathf.Pow(rb.velocity.z, 2));
+        float degreeToRadian = viewingDirection * Mathf.PI /180;
+        tempVector.x = horizontalVelocity * Mathf.Sin(degreeToRadian);
+        tempVector.z = horizontalVelocity * Mathf.Cos(degreeToRadian);
+        rb.velocity = tempVector;
+    }
+
 
 }
