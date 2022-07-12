@@ -27,6 +27,9 @@ public class WingsCalculation : MonoBehaviour
     private float angleOfAttack = -30f;
     private float flightDirection;
     private Vector3 rotationOfPlayer;
+
+    private float startTime; 
+
     public float PlyerWeight;
     void Awake()
     {
@@ -39,6 +42,8 @@ public class WingsCalculation : MonoBehaviour
         rb = Player.GetComponent<Rigidbody>();
 
         rb.AddForce(500f*rb.mass, 0, 0);
+        startTime = Time.time;
+
 
         //
     }
@@ -59,6 +64,26 @@ public class WingsCalculation : MonoBehaviour
         ReduceSpeed(angleOfAttack, flightDirection);
         IncreaseSpeed(angleOfAttack,dragForce, flightDirection);
         rb.AddForce(0, dragForce, 0);
+
+        // Print Debug
+        Debug.Log(rb.velocity.x + "\n"+ rb.velocity.z);
+
+        if((Time.time -startTime) > 3)
+        {
+            angleOfAttack = 0f;
+            rotationOfPlayer = Player.transform.eulerAngles;
+            rotationOfPlayer.y = 45f;
+
+            Player.transform.eulerAngles = rotationOfPlayer;
+        }
+        if((Time.time -startTime) > 5)
+        {
+            angleOfAttack = 30f;
+        }
+        if((Time.time -startTime) > 7)
+        {
+            angleOfAttack = 0f;
+        }
     }
     
     public float GetHandDistance()
