@@ -58,6 +58,7 @@ public class WingsCalculation : MonoBehaviour
         
         ReduceSpeed(angleOfAttack, flightDirection);
         IncreaseSpeed(angleOfAttack,dragForce, flightDirection);
+        rb.AddForce(0, dragForce, 0);
     }
     
     public float GetHandDistance()
