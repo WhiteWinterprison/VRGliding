@@ -133,7 +133,7 @@ GameObject:
   m_Component:
   - component: {fileID: 192809992}
   m_Layer: 0
-  m_Name: -------SkySzene-------
+  m_Name: ------SkySzene--------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5272,7 +5272,7 @@ GameObject:
   m_Component:
   - component: {fileID: 882984934}
   m_Layer: 0
-  m_Name: ------------GenrellScene----------
+  m_Name: ------GenrellScene-----
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5306,7 +5306,7 @@ GameObject:
   m_Component:
   - component: {fileID: 924440198}
   m_Layer: 0
-  m_Name: ----------Logic---------------
+  m_Name: ------Logic------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
