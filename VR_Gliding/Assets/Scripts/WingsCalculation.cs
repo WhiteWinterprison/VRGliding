@@ -1,12 +1,14 @@
 //-------------------------------------------------------------------------------
 //------------------------Isabel Bartelmus 06.07.22------------------------------
 //--Calculating the hand distance from the core to get the wingspan for gliding--
+//----------------Calculating the Physcial stuff for gliding---------------------
 //-------------------------------------------------------------------------------
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR;
 
+[RequireComponent (typeof(Rigidbody))] //adding a rgidbody to the obj the script is on
 public class WingsCalculation : MonoBehaviour
 {
     //---------Variables-------------
@@ -19,6 +21,8 @@ public class WingsCalculation : MonoBehaviour
     [SerializeField] private GameObject Player;
 
     private Rigidbody rb;
+
+    
 
     private float distance;
     private float dragForce = 0;
@@ -41,11 +45,10 @@ public class WingsCalculation : MonoBehaviour
         Player    = GameObject.FindGameObjectWithTag("Player");
         rb = Player.GetComponent<Rigidbody>();
 
-        rb.AddForce(500f*rb.mass, 0, 0);
+        //rb.AddForce(50f*rb.mass, 0, 0); //Start force (stat speed)
+        
         startTime = Time.time;
 
-
-        //
     }
 
     void Update()
@@ -66,24 +69,25 @@ public class WingsCalculation : MonoBehaviour
         rb.AddForce(0, dragForce, 0);
 
         // Print Debug
-        Debug.Log(rb.velocity.x + "\n"+ rb.velocity.z);
+        Debug.Log("Velocity on X  " + rb.velocity.x + "\n"+  "Velocity on Z  "+rb.velocity.z);
 
-        if((Time.time -startTime) > 3)
-        {
-            angleOfAttack = 0f;
-            rotationOfPlayer = Player.transform.eulerAngles;
-            rotationOfPlayer.y = 45f;
+        //Debug Movement kalkulation
+        // if((Time.time -startTime) > 3)
+        // {
+        //     angleOfAttack = 0f;
+        //     rotationOfPlayer = Player.transform.eulerAngles;
+        //     rotationOfPlayer.y = 45f;
 
-            Player.transform.eulerAngles = rotationOfPlayer;
-        }
-        if((Time.time -startTime) > 5)
-        {
-            angleOfAttack = 30f;
-        }
-        if((Time.time -startTime) > 7)
-        {
-            angleOfAttack = 0f;
-        }
+        //     Player.transform.eulerAngles = rotationOfPlayer;
+        // }
+        // if((Time.time -startTime) > 5)
+        // {
+        //     angleOfAttack = 30f;
+        // }
+        // if((Time.time -startTime) > 7)
+        // {
+        //     angleOfAttack = 0f;
+        // }
     }
     
     public float GetHandDistance()
@@ -114,6 +118,7 @@ public class WingsCalculation : MonoBehaviour
         // formula to calculate drag which is dependent on the velocity
         // this allows to simulate a terminal falling velocity
         float resultingForce = 0.5f * area_coefficient * wingspan * density_Air * drag_coefficient * (falling_velocity * falling_velocity);
+
         if (falling_velocity > 0)
         {
             resultingForce = -resultingForce;
