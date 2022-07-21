@@ -4975,17 +4975,41 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -6869540558858854829, guid: 48b01db53b8fb4a4887a59fdd33aabf7, type: 3}
+      propertyPath: m_Timeout
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 671781825512433978, guid: 48b01db53b8fb4a4887a59fdd33aabf7, type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4156611250717496198, guid: 48b01db53b8fb4a4887a59fdd33aabf7, type: 3}
+      propertyPath: m_UseGravity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4156611250717496198, guid: 48b01db53b8fb4a4887a59fdd33aabf7, type: 3}
+      propertyPath: m_EnableStrafe
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4156611250717496198, guid: 48b01db53b8fb4a4887a59fdd33aabf7, type: 3}
+      propertyPath: m_ForwardSource
+      value: 
+      objectReference: {fileID: 2137769932}
+    - target: {fileID: 4156611250717496198, guid: 48b01db53b8fb4a4887a59fdd33aabf7, type: 3}
+      propertyPath: m_GravityApplicationMode
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4156611250717496198, guid: 48b01db53b8fb4a4887a59fdd33aabf7, type: 3}
       propertyPath: m_LeftHandMoveAction.m_Reference
       value: 
       objectReference: {fileID: 6972639530819350904, guid: c348712bda248c246b8c49b3db54643f, type: 3}
     - target: {fileID: 4156611250717496198, guid: 48b01db53b8fb4a4887a59fdd33aabf7, type: 3}
+      propertyPath: m_RightHandMoveAction.m_Reference
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4156611250717496198, guid: 48b01db53b8fb4a4887a59fdd33aabf7, type: 3}
       propertyPath: m_LeftHandMoveAction.m_UseReference
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4156611250717496198, guid: 48b01db53b8fb4a4887a59fdd33aabf7, type: 3}
       propertyPath: m_RightHandMoveAction.m_UseReference
@@ -5100,8 +5124,28 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9098084294868267330, guid: 48b01db53b8fb4a4887a59fdd33aabf7, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9098084294868267330, guid: 48b01db53b8fb4a4887a59fdd33aabf7, type: 3}
+      propertyPath: m_EnableTurnAround
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9098084294868267330, guid: 48b01db53b8fb4a4887a59fdd33aabf7, type: 3}
+      propertyPath: m_LeftHandSnapTurnAction.m_Reference
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 9098084294868267330, guid: 48b01db53b8fb4a4887a59fdd33aabf7, type: 3}
+      propertyPath: m_RightHandSnapTurnAction.m_Reference
+      value: 
+      objectReference: {fileID: -6493913391331992944, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+    - target: {fileID: 9098084294868267330, guid: 48b01db53b8fb4a4887a59fdd33aabf7, type: 3}
       propertyPath: m_LeftHandSnapTurnAction.m_Action.m_Id
       value: e4e3ec76-93a9-4dda-be7a-2545cb5fd7f0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9098084294868267330, guid: 48b01db53b8fb4a4887a59fdd33aabf7, type: 3}
+      propertyPath: m_LeftHandSnapTurnAction.m_UseReference
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9098084294868267330, guid: 48b01db53b8fb4a4887a59fdd33aabf7, type: 3}
       propertyPath: m_RightHandSnapTurnAction.m_Action.m_Id
@@ -5110,6 +5154,10 @@ PrefabInstance:
     - target: {fileID: 9098084294868267330, guid: 48b01db53b8fb4a4887a59fdd33aabf7, type: 3}
       propertyPath: m_LeftHandSnapTurnAction.m_Action.m_Name
       value: Left Hand Snap Turn
+      objectReference: {fileID: 0}
+    - target: {fileID: 9098084294868267330, guid: 48b01db53b8fb4a4887a59fdd33aabf7, type: 3}
+      propertyPath: m_RightHandSnapTurnAction.m_UseReference
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9098084294868267330, guid: 48b01db53b8fb4a4887a59fdd33aabf7, type: 3}
       propertyPath: m_RightHandSnapTurnAction.m_Action.m_Name
@@ -6984,3 +7032,8 @@ Transform:
   m_Father: {fileID: 1478543568}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &2137769932 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7392328052643482270, guid: 48b01db53b8fb4a4887a59fdd33aabf7, type: 3}
+  m_PrefabInstance: {fileID: 393478123}
+  m_PrefabAsset: {fileID: 0}
