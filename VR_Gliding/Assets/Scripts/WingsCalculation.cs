@@ -64,7 +64,7 @@ public class WingsCalculation : MonoBehaviour
         dragForce = GravityCalculation(distance, rb.velocity.y);
 
         //head position maybe ?? //might make sick xD
-        flightDirection = Player.transform.rotation.eulerAngles.y;
+        flightDirection = Head.transform.rotation.eulerAngles.y;
         directionOfFlight(flightDirection);
         
         //Hand Rotation
@@ -76,7 +76,7 @@ public class WingsCalculation : MonoBehaviour
 
         // Print Debug
         //Debug.Log("Velocity on X  " + rb.velocity.x + "\n"+  "Velocity on Z  "+rb.velocity.z);
-        Debug.Log("Vlight angel" + angleOfAttack);
+        //Debug.Log("Vlight angel" + angleOfAttack);
         
         #region Debug
         //Debug Movement kalkulation
