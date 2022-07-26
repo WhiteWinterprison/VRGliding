@@ -41,7 +41,7 @@ public class WingsCalculation : MonoBehaviour
         RightHand = GameObject.FindGameObjectWithTag("RHand");
         LeftHand  = GameObject.FindGameObjectWithTag("LHand");
         Core      = GameObject.FindGameObjectWithTag("Core");
-        Head      = GameObject.FindGameObjectWithTag("Head");
+        Head      = GameObject.FindGameObjectWithTag("MainCamera");
         Player    = GameObject.FindGameObjectWithTag("Player");
         rb = Player.GetComponent<Rigidbody>();
 
@@ -58,19 +58,27 @@ public class WingsCalculation : MonoBehaviour
 
     void FixedUpdate()
     {   
+        //Arm Distance
         distance = GetHandDistance();
         distance = ClampWingspan(distance);
         dragForce = GravityCalculation(distance, rb.velocity.y);
+
+        //head position maybe ?? //might make sick xD
         flightDirection = Player.transform.rotation.eulerAngles.y;
         directionOfFlight(flightDirection);
         
+        //Hand Rotation
+        angleOfAttack = GetHandRotation();
+
         ReduceSpeed(angleOfAttack, flightDirection);
         IncreaseSpeed(angleOfAttack,dragForce, flightDirection);
         rb.AddForce(0, dragForce, 0);
 
         // Print Debug
-        Debug.Log("Velocity on X  " + rb.velocity.x + "\n"+  "Velocity on Z  "+rb.velocity.z);
-
+        //Debug.Log("Velocity on X  " + rb.velocity.x + "\n"+  "Velocity on Z  "+rb.velocity.z);
+        Debug.Log("Vlight angel" + angleOfAttack);
+        
+        #region Debug
         //Debug Movement kalkulation
         // if((Time.time -startTime) > 3)
         // {
@@ -88,8 +96,12 @@ public class WingsCalculation : MonoBehaviour
         // {
         //     angleOfAttack = 0f;
         // }
+        #endregion
+
+
     }
     
+    #region Hand Distance
     public float GetHandDistance()
     {
         float fullDist = 0f;
@@ -103,12 +115,56 @@ public class WingsCalculation : MonoBehaviour
         Debug.DrawLine(RightHand.transform.position , Core.transform.position,Color.magenta,rightDistance);
         Debug.DrawLine(LeftHand.transform.position, Core.transform.position, Color.blue ,leftDistance);
         Debug.DrawLine(Head.transform.position, Core.transform.position, Color.red , 2);
-
         #endregion
 
         return fullDist;
     }
+    #endregion
 
+    #region  Hand Rotation
+    public float GetHandRotation()
+    {
+        float combinedRoation = 0f;
+
+        float rightRotation = RightHand.transform.rotation.eulerAngles.x;
+        //Debug.Log("Right                  "+rightRotation);
+        float leftRotation = LeftHand.transform.rotation.eulerAngles.x;
+        //SDebug.Log("LEFT    "+leftRotation);
+
+        #region Clamp Left Hand
+        //Clamp Rotation Left Hand
+        if(leftRotation >180 && leftRotation < 360)
+        {
+            // minus 10 because 10 is your neutral position
+            leftRotation = leftRotation - 360 -5; 
+        }
+        else 
+        {
+            leftRotation -= 5;
+        }
+        #endregion
+
+        #region Clamp Right Hand
+          //Clamp Rotation Right  Hand
+        if(rightRotation >180 && rightRotation < 360)
+        {
+            // minus 10 because 10 is your neutral position
+            rightRotation = rightRotation - 360 -5; 
+        }
+        else 
+        {
+            rightRotation -= 5;
+        }
+        #endregion
+
+        float addedRotation = rightRotation + leftRotation;
+        combinedRoation = addedRotation;
+
+        return combinedRoation;
+    }
+    #endregion
+
+    #region Gravity
     public float GravityCalculation(float wingspan, float falling_velocity)
     {    
         float area_coefficient = 40f;
@@ -125,7 +181,9 @@ public class WingsCalculation : MonoBehaviour
         }
         return resultingForce;
     }
+    #endregion
 
+    #region Clamp Wing
     public float ClampWingspan(float wingspan)
     {
         if(wingspan > max_wingspan)
@@ -139,7 +197,9 @@ public class WingsCalculation : MonoBehaviour
 
         return wingspan/max_wingspan;
     }
+    #endregion
 
+    #region Reduce Speed
     public void ReduceSpeed(float climbingAngle, float viewingDirection)
     {   
         
@@ -170,7 +230,9 @@ public class WingsCalculation : MonoBehaviour
 
         }
     }
+    #endregion
 
+    #region Increas Speed
     public void IncreaseSpeed(float climbingAngle, float dragForce, float viewingDirection)
     {   
         if(climbingAngle < 0)
@@ -181,7 +243,9 @@ public class WingsCalculation : MonoBehaviour
         }
         
     }
+    #endregion
 
+    #region direction Of Flight
     public void directionOfFlight(float viewingDirection)
     {
         Vector3 tempVector = rb.velocity;
@@ -191,6 +255,7 @@ public class WingsCalculation : MonoBehaviour
         tempVector.z = horizontalVelocity * Mathf.Cos(degreeToRadian);
         rb.velocity = tempVector;
     }
+    #endregion
 
 
 }
