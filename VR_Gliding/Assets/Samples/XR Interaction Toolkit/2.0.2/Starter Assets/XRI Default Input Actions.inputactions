@@ -1071,6 +1071,45 @@
                     "action": "Turn",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3ff48e7b-2034-435a-8fed-fb24b0c13f0b",
+                    "path": "<XRSimulatedController>{RightHand}/primary2DAxis",
+                    "interactions": "Sector(directions=-1,sweepBehavior=1)",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Custom",
+            "id": "8ee753de-b1dd-40a4-976c-4de53136dba1",
+            "actions": [
+                {
+                    "name": "ResetPosition",
+                    "type": "Button",
+                    "id": "b6d03c15-f96b-42d5-a17e-d00bf858585e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "d667a410-7df4-406c-921c-65bc96fde1d0",
+                    "path": "<OculusTouchController>/primaryButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Generic XR Controller",
+                    "action": "ResetPosition",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }
