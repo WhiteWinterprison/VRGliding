@@ -30,6 +30,7 @@ public class WingsCalculation : MonoBehaviour
 
     private float angleOfAttack = -30f;
     private float flightDirection;
+    private float effectiveWingspan;
     private Vector3 rotationOfPlayer;
 
     private float startTime; 
@@ -63,6 +64,8 @@ public class WingsCalculation : MonoBehaviour
         distance = ClampWingspan(distance);
         dragForce = GravityCalculation(distance, rb.velocity.y);
 
+        effectiveWingspan = distance/max_wingspan;
+
         //head position maybe ?? //might make sick xD
         flightDirection = Head.transform.rotation.eulerAngles.y;
         directionOfFlight(flightDirection);
@@ -70,7 +73,7 @@ public class WingsCalculation : MonoBehaviour
         //Hand Rotation
         angleOfAttack = GetHandRotation();
 
-        ReduceSpeed(angleOfAttack, flightDirection);
+        ReduceSpeed(angleOfAttack, flightDirection,effectiveWingspan);
         IncreaseSpeed(angleOfAttack,dragForce, flightDirection);
         rb.AddForce(0, dragForce, 0);
 
@@ -200,7 +203,7 @@ public class WingsCalculation : MonoBehaviour
     #endregion
 
     #region Reduce Speed
-    public void ReduceSpeed(float climbingAngle, float viewingDirection)
+    public void ReduceSpeed(float climbingAngle, float viewingDirection, float effectiveWingspan)
     {   
         
         float tempVelocity = 0;
@@ -214,7 +217,9 @@ public class WingsCalculation : MonoBehaviour
         {   
             tempVelocity = horizontalVelocity - 9.81f * 0.02f * Mathf.Sin(degreeToRadian);
             Force = 40f * Mathf.Sin(degreeToRadian)* rb.mass;
+            Force = Force * effectiveWingspan; 
             rb.AddForce(0,Force,0);
+           
             if (tempVelocity < 0) 
             {
                 tempVector.x = 0;
